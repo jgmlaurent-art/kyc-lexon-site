@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Mise à jour fiche client — Lexon</title>
+<style>
+  :root {
+    --ink: #16181d;
+    --ink-soft: #4b5160;
+    --ink-xsoft: #8b909e;
+    --line: #d8dce4;
+    --paper: #fbfaf8;
+    --card: #ffffff;
+    --navy: #1f3864;
+    --black: #000000;
+    --navy-soft: #e8edf6;
+    --navy-mid: #2d4f8a;
+    --red: #c00000;
+    --ok: #1d7a4f;
+    --ok-soft: #e4f3ec;
+    --warn: #b45309;
+    --warn-soft: #fdf3e3;
+    --radius: 3px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--black);
+    color: #fff;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .brand { font-weight: 800; font-size: 18px; letter-spacing: .18em; }
+  .brand-sub { font-size: 11px; letter-spacing: .08em; opacity: .65; margin-top: 1px; }
+  .doc-ref { font-size: 11px; letter-spacing: .06em; opacity: .5; text-align: right; }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── INTRO BAND ── */
+  .intro-band {
+    border-left: 4px solid var(--navy);
+    background: var(--navy-soft);
+    padding: 18px 22px;
+    margin-bottom: 36px;
+  }
+  .intro-band h1 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .intro-band p { font-size: 14px; color: var(--ink-soft); }
+
+  /* ── PREFILL NOTICE ── */
+  .prefill-notice {
+    background: var(--warn-soft);
+    border: 1px solid #f0c97a;
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: var(--warn);
+    margin-bottom: 28px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .prefill-notice svg { flex-shrink: 0; margin-top: 2px; }
+
+  /* ── SECTION ── */
+  .form-section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--black);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-num {
+    width: 26px; height: 26px;
+    border: 1.5px solid rgba(255,255,255,.4);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .section-body { padding: 22px 20px; }
+
+  /* ── FIELD GRID ── */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 20px;
+  }
+  .field-grid.col-1 { grid-template-columns: 1fr; }
+  .field-grid.col-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media(max-width: 600px) {
+    .field-grid, .field-grid.col-3 { grid-template-columns: 1fr; }
+  }
+  .field-full { grid-column: 1 / -1; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  label .req { color: var(--red); margin-left: 2px; }
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+    border: 1.5px solid var(--line);
+    border-radius: var(--radius);
+    padding: 9px 11px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--ink);
+    background: #fff;
+    transition: border-color .15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--navy-mid);
+    box-shadow: 0 0 0 3px rgba(31,56,100,.1);
+  }
+  input[readonly] {
+    background: #f4f5f7;
+    color: var(--ink-soft);
+    cursor: default;
+    border-color: #e2e5eb;
+  }
+  textarea { resize: vertical; min-height: 72px; }
+  .field-hint { font-size: 12px; color: var(--ink-xsoft); }
+  .field-error { font-size: 12px; color: var(--red); display: none; }
+
+  /* ── CONTACT CARD ── */
+  .contact-card {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    position: relative;
+    background: #fafbfc;
+  }
+  .contact-card-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .contact-card-label .badge {
+    background: var(--navy);
+    color: #fff;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    letter-spacing: .08em;
+  }
+  .contact-card-label .badge.opt {
+    background: var(--ink-xsoft);
+  }
+  .btn-remove-contact {
+    position: absolute;
+    top: 14px; right: 14px;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .btn-remove-contact:hover { border-color: var(--red); color: var(--red); }
+
+  /* ── ADD BUTTON ── */
+  .btn-add {
+    border: 1.5px dashed var(--navy-mid);
+    background: var(--navy-soft);
+    color: var(--navy);
+    border-radius: var(--radius);
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .btn-add:hover { background: #dce5f5; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 18px 0;
+  }
+
+  /* ── SUBMIT ZONE ── */
+  .submit-zone {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .submit-legal { font-size: 12px; color: var(--ink-soft); max-width: 480px; }
+
+  .btn-submit {
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    padding: 13px 32px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .btn-submit:hover { background: var(--navy-mid); }
+  .btn-submit:disabled { background: var(--ink-xsoft); cursor: not-allowed; }
+
+  /* ── STATUS ── */
+  #status-msg {
+    display: none;
+    margin-top: 20px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  #status-msg.ok { background: var(--ok-soft); color: var(--ok); border: 1px solid #a3d5bc; }
+  #status-msg.err { background: #fce8e8; color: var(--red); border: 1px solid #f5b4b4; }
+
+  /* ── SPINNER ── */
+  .spinner {
+    display: none;
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-left: 8px;
+  }
+  .btn-submit.loading .spinner { display: inline-block; }
+  .btn-submit.loading .btn-label { opacity: .6; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ══ CONFIGURATION ══════════════════════════════════════════════════
+     WEBHOOK_URL : URL du déclencheur HTTP Power Automate
+     Si vide, la soumission est téléchargée en JSON local (mode test).
+     CLIENT_CODE, CLIENT_NAME : pré-remplis via paramètres URL
+       ex. ?code=CLI001&name=Boutiques+XYZ
+════════════════════════════════════════════════════════════════════ -->
+<script>
+  const WEBHOOK_URL = "";   // ← coller l'URL Power Automate ici
+</script>
+
+<header class="site-header">
+  <div style="display:flex;align-items:center;">
+    <img src="data:image/png;base64,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" alt="Lexon"
+         style="height:30px;width:auto;display:block;">
+    <span style="margin-left:16px;padding-left:16px;border-left:1px solid rgba(255,255,255,.3);font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.65);">Mise à jour fiche client</span>
+  </div>
+  <div style="text-align:right;">
+    <div class="doc-ref">FRM-COM-KYC-002 · v1.0</div>
+    <a href="https://lexon-design.com/" target="_blank" rel="noopener"
+       style="font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.04em;text-decoration:none;transition:color .15s;"
+       onmouseover="this.style.color='rgba(255,255,255,.9)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">
+      lexon-design.com ↗
+    </a>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <div class="intro-band">
+    <h1>Actualisation de vos informations</h1>
+    <p>Dans le cadre de notre programme de mise à jour annuelle des données clients, merci de vérifier et compléter les informations ci-dessous. Cela nous permettra de vous adresser nos documents commerciaux et comptables aux bonnes personnes.</p>
+  </div>
+
+  <div class="prefill-notice">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7.5" stroke="#b45309"/><path d="M8 4.5v4M8 10.5v1" stroke="#b45309" stroke-width="1.5" stroke-linecap="round"/></svg>
+    Les champs grisés sont pré-remplis depuis notre base. Corrigez-les si nécessaire avant de valider.
+  </div>
+
+  <form id="kyc-form" novalidate>
+
+    <!-- ── SECTION 1 : IDENTIFICATION ── -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <div class="section-title">Identification du client</div>
+      </div>
+      <div class="section-body">
+        <div class="field-grid">
+          <div class="field">
+            <label>Code client <span class="req">*</span></label>
+            <input type="text" id="client_code" name="client_code" readonly>
+          </div>
+          <div class="field">
+            <label>Raison sociale <span class="req">*</span></label>
+            <input type="text" id="client_name" name="client_name">
+            <span class="field-error" id="err-client_name">Ce champ est requis.</span>
+          </div>
+          <div class="field">
+            <label>Forme juridique</label>
+            <select id="legal_form" name="legal_form">
+              <option value="">— Sélectionner —</option>
+              <option>SAS</option><option>SARL</option><option>SA</option>
+              <option>SNC</option><option>EURL</option><option>Auto-entrepreneur</option>
+              <option>Association</option><option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>SIREN / N° d'identification <span class="req">*</span></label>
+            <input type="text" id="siren" name="siren" placeholder="ex. 123 456 789">
+            <span class="field-error" id="err-siren">Ce champ est requis.</span>
+          </div>
+          <div class="field">
+            <label>N° TVA intracommunautaire</label>
+            <input type="text" id="vat_number" name="vat_number" placeholder="ex. FR00123456789">
+          </div>
+          <div class="field">
+            <label>Site web</label>
+            <input type="text" id="website" name="website" placeholder="https://…">
+          </div>
+          <div class="field field-full">
+            <label>Adresse (siège social)</label>
+            <input type="text" id="address" name="address" placeholder="N° et nom de rue">
+          </div>
+          <div class="field">
+            <label>Code postal</label>
+            <input type="text" id="zip" name="zip">
+          </div>
+          <div class="field">
+            <label>Ville</label>
+            <input type="text" id="city" name="city">
+          </div>
+          <div class="field">
+            <label>Pays</label>
+            <input type="text" id="country" name="country">
+          </div>
+          <div class="field">
+            <label>Téléphone principal du siège</label>
+            <input type="tel" id="phone_main" name="phone_main" placeholder="+33 1 23 45 67 89">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── SECTION 2 : ADRESSES DE FACTURATION ET LIVRAISON ── -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <div class="section-title">Adresses de facturation et de livraison</div>
+      </div>
+      <div class="section-body">
+
+        <!-- Bill-to -->
+        <div class="contact-card-label" style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:14px;">
+          Adresse de facturation <span style="background:var(--navy);color:#fff;font-size:9px;padding:2px 7px;border-radius:20px;letter-spacing:.08em;margin-left:8px;">Bill-to</span>
+        </div>
+        <div class="field-grid" style="margin-bottom:28px;">
+          <div class="field field-full">
+            <label>Raison sociale (si différente)</label>
+            <input type="text" id="bill_company" name="bill_company" placeholder="Laisser vide si identique à la section 1">
+          </div>
+          <div class="field field-full">
+            <label>Adresse — ligne 1 <span class="req">*</span></label>
+            <input type="text" id="bill_line1" name="bill_line1" placeholder="N° et nom de rue">
+            <span class="field-error" id="err-bill_line1">Ce champ est requis.</span>
+          </div>
+          <div class="field field-full">
+            <label>Adresse — ligne 2</label>
+            <input type="text" id="bill_line2" name="bill_line2" placeholder="Bâtiment, étage, boîte postale…">
+          </div>
+          <div class="field">
+            <label>Code postal <span class="req">*</span></label>
+            <input type="text" id="bill_zip" name="bill_zip">
+            <span class="field-error" id="err-bill_zip">Ce champ est requis.</span>
+          </div>
+          <div class="field">
+            <label>Ville <span class="req">*</span></label>
+            <input type="text" id="bill_city" name="bill_city">
+            <span class="field-error" id="err-bill_city">Ce champ est requis.</span>
+          </div>
+          <div class="field">
+            <label>Pays <span class="req">*</span></label>
+            <input type="text" id="bill_country" name="bill_country">
+            <span class="field-error" id="err-bill_country">Ce champ est requis.</span>
+          </div>
+          <div class="field">
+            <label>N° TVA intracommunautaire</label>
+            <input type="text" id="bill_vat" name="bill_vat" placeholder="ex. FR00123456789">
+          </div>
+          <div class="field">
+            <label>E-mail de réception des factures</label>
+            <input type="email" id="bill_email" name="bill_email" placeholder="factures@societe.com">
+            <span class="field-error" id="err-bill_email">E-mail valide requis.</span>
+          </div>
+          <div class="field">
+            <label>Référence à faire figurer sur les factures</label>
+            <input type="text" id="bill_ref" name="bill_ref" placeholder="N° de bon de commande, code analytique…">
+          </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- Ship-to -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div class="contact-card-label" style="font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);margin-bottom:0;">
+            Adresse de livraison <span style="background:var(--navy);color:#fff;font-size:9px;padding:2px 7px;border-radius:20px;letter-spacing:.08em;margin-left:8px;">Ship-to</span>
+          </div>
+          <label style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink-soft);cursor:pointer;margin-left:auto;">
+            <input type="checkbox" id="ship_same_as_bill" onchange="toggleShipTo(this)"> Identique à l'adresse de facturation
+          </label>
+        </div>
+        <div id="ship-fields">
+          <div class="field-grid">
+            <div class="field field-full">
+              <label>Raison sociale / Nom du destinataire</label>
+              <input type="text" id="ship_company" name="ship_company" placeholder="Si différent de la raison sociale principale">
+            </div>
+            <div class="field field-full">
+              <label>Adresse — ligne 1 <span class="req">*</span></label>
+              <input type="text" id="ship_line1" name="ship_line1" placeholder="N° et nom de rue">
+              <span class="field-error" id="err-ship_line1">Ce champ est requis.</span>
+            </div>
+            <div class="field field-full">
+              <label>Adresse — ligne 2</label>
+              <input type="text" id="ship_line2" name="ship_line2" placeholder="Bâtiment, étage, quai de réception…">
+            </div>
+            <div class="field">
+              <label>Code postal <span class="req">*</span></label>
+              <input type="text" id="ship_zip" name="ship_zip">
+              <span class="field-error" id="err-ship_zip">Ce champ est requis.</span>
+            </div>
+            <div class="field">
+              <label>Ville <span class="req">*</span></label>
+              <input type="text" id="ship_city" name="ship_city">
+              <span class="field-error" id="err-ship_city">Ce champ est requis.</span>
+            </div>
+            <div class="field">
+              <label>Pays <span class="req">*</span></label>
+              <input type="text" id="ship_country" name="ship_country">
+              <span class="field-error" id="err-ship_country">Ce champ est requis.</span>
+            </div>
+            <div class="field">
+              <label>Contact réception (nom)</label>
+              <input type="text" id="ship_contact_name" name="ship_contact_name" placeholder="Responsable réception / quai">
+            </div>
+            <div class="field">
+              <label>Téléphone réception</label>
+              <input type="tel" id="ship_contact_phone" name="ship_contact_phone" placeholder="+33 6 …">
+            </div>
+            <div class="field field-full">
+              <label>Instructions de livraison particulières</label>
+              <textarea id="ship_instructions" name="ship_instructions" style="min-height:56px;" placeholder="Horaires d'ouverture du quai, accès spécifique, référence d'étiquette transporteur…"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SECTION 3 : CONTACTS CLÉS ── -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <div class="section-title">Contacts clés</div>
+      </div>
+      <div class="section-body">
+        <p style="font-size:13px;color:var(--ink-soft);margin-bottom:20px;">
+          Indiquez les coordonnées des personnes à contacter pour nos échanges commerciaux et comptables. Les deux premiers contacts sont obligatoires ; vous pouvez ajouter autant de contacts supplémentaires que vous le souhaitez.
+        </p>
+
+        <!-- Contact fixe 1 : Responsable Achats -->
+        <div class="contact-card" id="card-achats">
+          <div class="contact-card-label">
+            Responsable des achats
+            <span class="badge">Obligatoire</span>
+          </div>
+          <div class="field-grid col-3">
+            <div class="field">
+              <label>Nom complet <span class="req">*</span></label>
+              <input type="text" id="achats_name" name="achats_name" placeholder="Prénom Nom">
+              <span class="field-error" id="err-achats_name">Ce champ est requis.</span>
+            </div>
+            <div class="field">
+              <label>Adresse e-mail <span class="req">*</span></label>
+              <input type="email" id="achats_email" name="achats_email" placeholder="prenom.nom@societe.com">
+              <span class="field-error" id="err-achats_email">E-mail valide requis.</span>
+            </div>
+            <div class="field">
+              <label>Téléphone direct</label>
+              <input type="tel" id="achats_phone" name="achats_phone" placeholder="+33 6 …">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact fixe 2 : Responsable Comptabilité Fournisseurs -->
+        <div class="contact-card" id="card-compta">
+          <div class="contact-card-label">
+            Responsable comptabilité fournisseurs
+            <span class="badge">Obligatoire</span>
+          </div>
+          <div class="field-grid col-3">
+            <div class="field">
+              <label>Nom complet <span class="req">*</span></label>
+              <input type="text" id="compta_name" name="compta_name" placeholder="Prénom Nom">
+              <span class="field-error" id="err-compta_name">Ce champ est requis.</span>
+            </div>
+            <div class="field">
+              <label>Adresse e-mail <span class="req">*</span></label>
+              <input type="email" id="compta_email" name="compta_email" placeholder="prenom.nom@societe.com">
+              <span class="field-error" id="err-compta_email">E-mail valide requis.</span>
+            </div>
+            <div class="field">
+              <label>Téléphone direct</label>
+              <input type="tel" id="compta_phone" name="compta_phone" placeholder="+33 6 …">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contacts supplémentaires (dynamiques) -->
+        <div id="extra-contacts"></div>
+
+        <button type="button" class="btn-add" id="btn-add-contact">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Ajouter un autre contact
+        </button>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3 : COMMENTAIRES ── -->
+    <div class="form-section">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <div class="section-title">Informations complémentaires</div>
+      </div>
+      <div class="section-body">
+        <div class="field">
+          <label>Commentaires libres</label>
+          <textarea id="comments" name="comments" placeholder="Toute information utile à notre relation commerciale (changement de raison sociale en cours, adresse de facturation différente, instructions de livraison particulières…)"></textarea>
+          <span class="field-hint">Optionnel — 1 000 caractères max.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SUBMIT ── -->
+    <div class="submit-zone">
+      <p class="submit-legal">
+        Les informations communiquées sont utilisées exclusivement dans le cadre de notre relation commerciale et stockées de manière sécurisée. Conformément au RGPD, vous disposez d'un droit d'accès, de rectification et de suppression en écrivant à <a href="mailto:compliance@lexon.com" style="color:var(--navy);">compliance@lexon.com</a>.
+      </p>
+      <button type="submit" class="btn-submit" id="btn-submit">
+        <span class="btn-label">Envoyer ma mise à jour</span>
+        <span class="spinner" id="spinner"></span>
+      </button>
+    </div>
+
+    <div id="status-msg"></div>
+
+  </form>
+</main>
+
+<script>
+
+// ── SHIP-TO TOGGLE ──────────────────────────────────────────────────
+function toggleShipTo(cb) {
+  const fields = document.getElementById('ship-fields');
+  fields.style.opacity = cb.checked ? '.4' : '1';
+  fields.querySelectorAll('input, textarea').forEach(el => el.disabled = cb.checked);
+}
+
+// ── PRÉ-REMPLISSAGE VIA PARAMÈTRES URL ──────────────────────────────
+(function prefill() {
+  const p = new URLSearchParams(window.location.search);
+  const set = (id, val) => { const el = document.getElementById(id); if (el && val) el.value = val; };
+  set('client_code',  p.get('code'));
+  set('client_name',  p.get('name'));
+  set('legal_form',   p.get('legal_form'));
+  set('siren',        p.get('siren'));
+  set('vat_number',   p.get('vat'));
+  set('country',      p.get('country') || 'France');
+  set('address',      p.get('address'));
+  set('zip',          p.get('zip'));
+  set('city',         p.get('city'));
+  set('website',      p.get('website'));
+  set('phone_main',   p.get('phone'));
+  // contacts pré-remplis (facultatif)
+  set('achats_name',  p.get('achats_name'));
+  set('achats_email', p.get('achats_email'));
+  set('achats_phone', p.get('achats_phone'));
+  set('compta_name',  p.get('compta_name'));
+  set('compta_email', p.get('compta_email'));
+  set('compta_phone', p.get('compta_phone'));
+})();
+
+// ── CONTACTS DYNAMIQUES ─────────────────────────────────────────────
+let extraCount = 0;
+document.getElementById('btn-add-contact').addEventListener('click', () => {
+  extraCount++;
+  const idx = extraCount;
+  const card = document.createElement('div');
+  card.className = 'contact-card';
+  card.id = `card-extra-${idx}`;
+  card.innerHTML = `
+    <div class="contact-card-label">
+      Contact supplémentaire ${idx}
+      <span class="badge opt">Optionnel</span>
+    </div>
+    <button type="button" class="btn-remove-contact" onclick="removeCard('card-extra-${idx}')">Supprimer</button>
+    <div class="field-grid col-3">
+      <div class="field">
+        <label>Nom complet</label>
+        <input type="text" name="extra_${idx}_name" placeholder="Prénom Nom">
+      </div>
+      <div class="field">
+        <label>Rôle / Fonction</label>
+        <input type="text" name="extra_${idx}_role" placeholder="ex. Directeur commercial">
+      </div>
+      <div class="field" style="grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="field">
+          <label>Adresse e-mail</label>
+          <input type="email" name="extra_${idx}_email" placeholder="prenom.nom@societe.com">
+        </div>
+        <div class="field">
+          <label>Téléphone direct</label>
+          <input type="tel" name="extra_${idx}_phone" placeholder="+33 6 …">
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('extra-contacts').appendChild(card);
+});
+
+function removeCard(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// ── VALIDATION ──────────────────────────────────────────────────────
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function required(id) {
+  const el = document.getElementById(id);
+  const err = document.getElementById('err-' + id);
+  if (!el) return true;
+  const ok = el.value.trim() !== '';
+  err && (err.style.display = ok ? 'none' : 'block');
+  el.style.borderColor = ok ? '' : 'var(--red)';
+  return ok;
+}
+function email(id) {
+  const el = document.getElementById(id);
+  const err = document.getElementById('err-' + id);
+  if (!el) return true;
+  const ok = EMAIL_RE.test(el.value.trim());
+  err && (err.style.display = ok ? 'none' : 'block');
+  el.style.borderColor = ok ? '' : 'var(--red)';
+  return ok;
+}
+function validate() {
+  const shipSame = document.getElementById('ship_same_as_bill').checked;
+  const billEmail = document.getElementById('bill_email').value.trim();
+  const checks = [
+    required('client_name'), required('siren'),
+    required('bill_line1'), required('bill_zip'), required('bill_city'), required('bill_country'),
+    billEmail === '' || email('bill_email'),
+    ...(shipSame ? [] : [required('ship_line1'), required('ship_zip'), required('ship_city'), required('ship_country')]),
+    required('achats_name'),  email('achats_email'),
+    required('compta_name'),  email('compta_email'),
+  ];
+  return checks.every(Boolean);
+}
+
+// ── COLLECTE DES DONNÉES ────────────────────────────────────────────
+function collect() {
+  const f = document.getElementById('kyc-form');
+  const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+
+  // Contacts supplémentaires
+  const extras = [];
+  document.querySelectorAll('[name^="extra_"][name$="_name"]').forEach(el => {
+    const pfx = el.name.replace('_name','');
+    extras.push({
+      name:  el.value.trim(),
+      role:  (f.querySelector(`[name="${pfx}_role"]`) || {}).value?.trim() || '',
+      email: (f.querySelector(`[name="${pfx}_email"]`) || {}).value?.trim() || '',
+      phone: (f.querySelector(`[name="${pfx}_phone"]`) || {}).value?.trim() || '',
+    });
+  });
+
+  return {
+    meta: {
+      form_id:        'FRM-COM-KYC-002',
+      submitted_at:   new Date().toISOString(),
+      source_url:     window.location.href,
+    },
+    client: {
+      code:           val('client_code'),
+      name:           val('client_name'),
+      legal_form:     val('legal_form'),
+      siren:          val('siren'),
+      vat_number:     val('vat_number'),
+      country:        val('country'),
+      address:        val('address'),
+      zip:            val('zip'),
+      city:           val('city'),
+      website:        val('website'),
+      phone_main:     val('phone_main'),
+    },
+    bill_to: {
+      company:  val('bill_company'),
+      line1:    val('bill_line1'),
+      line2:    val('bill_line2'),
+      zip:      val('bill_zip'),
+      city:     val('bill_city'),
+      country:  val('bill_country'),
+      vat:      val('bill_vat'),
+      email:    val('bill_email'),
+      ref:      val('bill_ref'),
+    },
+    ship_to: document.getElementById('ship_same_as_bill').checked
+      ? { same_as_bill: true }
+      : {
+          same_as_bill:    false,
+          company:         val('ship_company'),
+          line1:           val('ship_line1'),
+          line2:           val('ship_line2'),
+          zip:             val('ship_zip'),
+          city:            val('ship_city'),
+          country:         val('ship_country'),
+          contact_name:    val('ship_contact_name'),
+          contact_phone:   val('ship_contact_phone'),
+          instructions:    val('ship_instructions'),
+        },
+    contacts: {
+      purchasing: {
+        name:  val('achats_name'),
+        email: val('achats_email'),
+        phone: val('achats_phone'),
+      },
+      ap: {
+        name:  val('compta_name'),
+        email: val('compta_email'),
+        phone: val('compta_phone'),
+      },
+      additional: extras,
+    },
+    comments: val('comments'),
+  };
+}
+
+// ── SOUMISSION ──────────────────────────────────────────────────────
+document.getElementById('kyc-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validate()) {
+    document.getElementById('status-msg').style.display = 'none';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  const msg = document.getElementById('status-msg');
+  const payload = collect();
+
+  btn.disabled = true;
+  btn.classList.add('loading');
+  msg.style.display = 'none';
+
+  if (!WEBHOOK_URL) {
+    // MODE TEST : téléchargement JSON local
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `kyc-update-${payload.client.code || 'test'}-${Date.now()}.json`;
+    a.click();
+    btn.disabled = false;
+    btn.classList.remove('loading');
+    msg.className = 'ok';
+    msg.textContent = '✓ Mode test : le JSON a été téléchargé localement (aucun webhook configuré).';
+    msg.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    msg.className = 'ok';
+    msg.innerHTML = '✓ Vos informations ont bien été transmises. Merci — notre équipe prend en compte vos mises à jour.';
+    btn.textContent = 'Envoyé ✓';
+    btn.style.background = 'var(--ok)';
+  } catch (err) {
+    msg.className = 'err';
+    msg.textContent = `Une erreur est survenue lors de l'envoi (${err.message}). Veuillez réessayer ou contacter votre interlocuteur Lexon.`;
+    btn.disabled = false;
+    btn.classList.remove('loading');
+  }
+  msg.style.display = 'block';
+  msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+});
+</script>
+</body>
+</html>
